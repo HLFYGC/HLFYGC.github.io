@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>星座性格测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #result {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>星座性格测试</h1>
+    
+    <div id="quiz">
+        <div class="question" id="q1">
+            <h3>1. 你更喜欢哪种休闲方式？</h3>
+            <input type="radio" name="q1" value="a"> 与朋友聚会<br>
+            <input type="radio" name="q1" value="b"> 独自看书/看电影<br>
+            <input type="radio" name="q1" value="c"> 户外运动探险
+        </div>
+
+        <div class="question" id="q2">
+            <h3>2. 面对重要决定时，你通常：</h3>
+            <input type="radio" name="q2" value="a"> 相信直觉快速决定<br>
+            <input type="radio"name="q2" value="b"> 详细分析利弊<br>
+            <input type="radio" name="q2" value="c"> 征求他人意见
+        </div>
+
+        <div class="question" id="q3">
+            <h3>3. 你最大的优点是：</h3>
+            <input type="radio" name="q3" value="a"> 热情开朗<br>
+            <input type="radio" name="q3" value="b"> 细心谨慎<br>
+            <input type="radio" name="q3" value="c"> 富有创意
+        </div>
+
+        <button onclick="showResult()">查看结果</button>
+    </div>
+
+    <div id="result">
+        <h2>测试结果</h2>
+        <p id="resultText"></p>
+        <button onclick="location.reload()">重新测试</button>
+    </div>
+
+    <script>
+        const zodiacData = {
+            'fire': {
+                name: '火象星座（白羊/狮子/射手）',
+                desc: '你充满热情与活力！具有领导才能，行动力强，喜欢挑战新事物，性格开朗乐观，但偶尔会有些急躁。'
+            },
+            'earth': {
+                name: '土象星座（金牛/处女/摩羯）',
+                desc: '你踏实稳重值得信赖！做事认真有条理，注重实际效益，具有强大的责任感，但有时会过于保守。'
+            },
+            'air': {
+                name: '风象星座（双子/天秤/水瓶）',
+                desc: '你思维敏捷充满创意！善于沟通交流，追求自由与变化，充满好奇心，但偶尔会显得不够专注。'
+            },
+            'water': {
+                name: '水象星座（巨蟹/天蝎/双鱼）',
+                desc: '你情感丰富直觉敏锐！富有同情心和想象力，重视情感联系，但有时会过于敏感。'
+            }
+        };
+
+        function calculateResult() {
+            let scores = { fire: 0, earth: 0, air: 0, water: 0 };
+            
+            // 问题计分规则
+            const answerKey = {
+                q1: { a: 'fire', b: 'earth', c: 'air' },
+                q2: { a: 'fire', b: 'earth', c: 'water' },
+                q3: { a: 'fire', b: 'earth', c: 'air' }
+            };
+
+            // 计算每个问题的得分
+            for(let q in answerKey) {
+                const selected = document.querySelector(`input[name=${q}]:checked`);
+                if(selected) {
+                    const element = answerKey[q][selected.value];
+                    scores[element]++;
+                }
+            }
+
+            // 找出最高分
+            let maxScore = Math.max(...Object.values(scores));
+            return Object.keys(scores).find(key => scores[key] === maxScore);
+        }
+
+        function showResult() {
+            const resultType = calculateResult();
+            const resultDiv = document.getElementById('result');
+            const resultText = document.getElementById('resultText');
+            
+            resultDiv.style.display = 'block';
+            resultText.innerHTML = `
+                <strong>${zodiacData[resultType].name}</strong><br><br>
+                ${zodiacData[resultType].desc}
+            `;
+            
+            // 滚动到结果位置
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
